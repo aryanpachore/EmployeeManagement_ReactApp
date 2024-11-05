@@ -2,13 +2,14 @@
 import Login from './components/auth/Login';
  import Employeedashboard from './components/Dashboard/Employeedashboard'
 import Admindashboard from './components/Dashboard/Admindashboard';
+
  const App =()=>{
-  
+ 
   return (
     <>
-    {/*<Login/>*/}
+    <Login/>
    {/* <Employeedashboard/>*/}
-    <Admindashboard/>
+    {/*<Admindashboard/>*/}
     </>
   )
  }
