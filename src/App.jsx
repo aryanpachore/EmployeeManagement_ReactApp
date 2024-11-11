@@ -7,23 +7,36 @@ import { AuthContext } from './context/Authprovider';
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [loggedInUserData, setLoggedInUserData] = useState(null);
+  const authData = useContext(AuthContext); // Use authData instead of userData for clarity
 
   useEffect(() => {
-    setLocalstorage();
-    getLocalstorage();
-  }, []); // Added dependency array
+    if (authData) {
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (loggedInUser) {
+        setUser(loggedInUser.role);
+        setLoggedInUserData(loggedInUser.data);
+      }
+    }
+  }, [authData]); // Include authData as a dependency
 
   const handleLogin = (email, password) => {
     if (email === 'admin@me.com' && password === '123') {
       setUser('admin');
-    } else if (email === 'user@me.com' && password === '123') {
-      setUser('employee');
+      localStorage.setItem('loggedInUser', JSON.stringify({ role: 'admin' }));
+    } else if (authData) {
+      const employee = authData.find((e) => e.email === email && e.password === password);
+      if (employee) {
+        setUser('employee');
+        setLoggedInUserData(employee);
+        localStorage.setItem('loggedInUser', JSON.stringify({ role: 'employee', data: employee }));
+      } else {
+        alert("Invalid Credentials");
+      }
     } else {
-      alert('Invalid credentials');
+      alert("Invalid Credentials");
     }
   };
-
-  const data = useContext(AuthContext)
 
   return (
     <>
